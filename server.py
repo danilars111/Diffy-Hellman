@@ -22,15 +22,15 @@ while True:
 		print>>sys.stderr, 'connection from', client_adress
 	
 		while True:
-			data = connection.recv(16)
+			data = connection.recv(128)
 			print>>sys.stderr, 'received "%s"' % data
 			if data:
-				print>>sys.stderr, 'sending data back to client'
+				#print>>sys.stderr, 'sending data back to client'
 				connection.sendall(data)
 			else:
 				print>>sys.stderr, 'no more data from', client_adress
 				break
 	finally:
-		connection.close()
-		
-		
+		if(data == ""):
+			print>>sys.stderr, 'closing socket'
+			sock.close()
