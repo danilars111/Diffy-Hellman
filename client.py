@@ -1,5 +1,6 @@
 import socket
 import sys
+import encrypt.py
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
