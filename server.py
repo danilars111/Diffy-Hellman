@@ -2,8 +2,8 @@ import socket
 import sys
 import encrypt
 
-prime = 7
-generator = 3
+prime = 11
+generator = 5
 number = 4
 
 
@@ -24,7 +24,7 @@ def echo(data, connection, client_adress):
 	if data:
 		#print>>sys.stderr, 'sending data back to client'
 		connection.sendall(data)
-		return data
+		return connection.recv(128)
 	else:
 		print>>sys.stderr, 'no more data from', client_adress
 		return False
@@ -33,7 +33,7 @@ def key_exchange(connection, client_adress):
 
         sk = encrypt.diffyhellman(generator, prime, number)
         sk = echo(str(sk), connection, client_adress)
-
+        
         sk = encrypt.diffyhellman(int(sk), prime, number)
         print >> sys.stderr, "Your super secret key is '%s'" % sk
 
@@ -50,11 +50,14 @@ def connect():
 			while True:
 				data = connection.recv(128)
 				print>>sys.stderr, 'received "%s"' % data
-				if not echo(data,connection, client_adress):
-					break
+				if data:
+                                    connection.sendall(data)
+                                else:
+                                    break
+					
 		finally:
-			if(data == ""):
-				print>>sys.stderr, 'closing socket'
-				sock.close()
+                    if(data == ""):
+		         print>>sys.stderr, 'closing socket'
+		         sock.close()
 
 connect()

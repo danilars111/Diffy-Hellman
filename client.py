@@ -5,9 +5,9 @@ import encrypt
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 
-prime = 7
-generator = 3
-number = 2
+prime = 11
+generator = 5
+number = 12
 
 def connect():
 	confirm = raw_input("Do you want to connect?[y/n]\n")
@@ -30,7 +30,8 @@ def send_data(message):
 	sock.sendall(str (message))
 
 	#return for response from server
-	return sock.recv(len(str(message)))
+         
+	return sock.recv(128)
 
 def key_exchange():
 	
