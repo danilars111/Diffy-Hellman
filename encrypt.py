@@ -7,6 +7,7 @@ import sys
 
 #def encrypt(password,message):
     #encrypt the message
+<<<<<<< HEAD
 #    BLOCK_SIZE = 32
 #    PADDING = '{'
     
@@ -25,10 +26,25 @@ import sys
     #Encrypts the message with the cipher and produces a ciphertext
 #    ciphertext = EncodeAES(cipher, message)
 #    print('Encrypted string:', ciphertext, file=sys.stderr)
+=======
+    BLOCK_SIZE = 16
+    PADDING = '{'
+
+    pad = lambda s: s + (BLOCK_SIZE - len(s) % BLOCK_SIZE) * PADDING
+
+    EncodeAES = lambda c, s: base64.b64encode(c.encrypt(pad(s)))
+   
+
+    cipher = AES.new(pad(key))
+    
+    encoded = EncodeAES(cipher, message)
+    print>>sys.stderr, 'Encrypted string:', encoded
+
 
 def diffyhellman(gen, prime, i):
 	#gen and prim are agreed upon values and i is a private secret
 	return gen**i % prime
+
 
 #encrypt(3,'hej')
 
