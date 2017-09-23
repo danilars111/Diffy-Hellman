@@ -5,8 +5,8 @@ import base64
 import hashlib
 
 def encrypt(password,message):
-encrypt the message
 
+    #encrypt the message
     BLOCK_SIZE = 32
     PADDING = '{'
     
@@ -23,6 +23,7 @@ encrypt the message
     cipher = AES.new(key)
     
     #Encrypts the message with the cipher and produces a ciphertext
+
     ciphertext = EncodeAES(cipher, message)
     print('Encrypted string:', ciphertext, file=sys.stderr)
 
