@@ -5,9 +5,9 @@ import encrypt
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 
-prime = 11
-generator = 5
-number = 12
+prime = 47791
+generator = 48589
+number = 12222
 
 def connect():
 	confirm = raw_input("Do you want to connect?[y/n]\n")
@@ -49,7 +49,7 @@ def client():
 		sk = key_exchange()
 		#Keep going
 		while True:
-			message = raw_input("What is your message\n")
+			message = encrypt.encrypt(sk, (raw_input("What is your message\n")))
 			#Until the message is empty
 			if (message == ""):
 				print>>sys.stderr, 'closing socket'

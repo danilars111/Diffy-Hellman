@@ -26,7 +26,6 @@ def encrypt(password,message):
 
     ciphertext = EncodeAES(cipher, message)
     #print('Encrypted string:', ciphertext, file=sys.stderr)
-    print>>sys.stderr, 'Encrypted string: %s' % ciphertext
 
     return ciphertext
 
@@ -42,12 +41,8 @@ def decrypt (password,ciphertext):
     decoded = DecodeAES(cipher, ciphertext)
 
    #print('Decrypted string:', decoded, file=sys.stderr)
-    print>>sys.stderr, 'Decrypted string: %s' % decoded
-
+    return decoded
 def diffyhellman(gen, prime, i):
 	#gen and prim are agreed upon values and i is a private secret
 	return gen**i % prime
 
-
-encrypt(3,'hej')
-decrypt(3, encrypt(3,'hej'))

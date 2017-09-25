@@ -2,9 +2,10 @@ import socket
 import sys
 import encrypt
 
-prime = 11
-generator = 5
-number = 4
+prime = 47791
+generator = 48589
+number = 98222
+
 
 
 
@@ -45,13 +46,14 @@ def connect():
 		connection, client_adress = sock.accept()	
 		try:	
 			print>>sys.stderr, 'connection from', client_adress
-			key_exchange(connection, client_adress)
+			sk = key_exchange(connection, client_adress)
 	
 			while True:
 				data = connection.recv(128)
 				print>>sys.stderr, 'received "%s"' % data
+				print>>sys.stderr, 'received "%s"' % encrypt.decrypt(sk, data)
 				if data:
-                                    connection.sendall(data)
+                                    connection.sendall(encrypt.decrypt(sk, data))
                                 else:
                                     break
 					
