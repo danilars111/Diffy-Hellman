@@ -1,17 +1,19 @@
 #Module used for encryption
 import sys
 from Crypto.Cipher import AES
+from Crypto import Random
 import base64
 import hashlib
 
 def encrypt(password,message):
 
     #encrypt the message
-    BLOCK_SIZE = 32
+    BLOCK_SIZE = 16
     PADDING = '{'
+
     
     #Function that the message is a multiple of the block size
-    pad = lambda s: s + (BLOCK_SIZE - len(s) % BLOCK_SIZE) * PADDING
+    pad = lambda s: s + ((BLOCK_SIZE - len(s) % BLOCK_SIZE) * PADDING)
     
     #Produces a ciphertext that consists of (A-Z, a-z, 0-9,+,/
     EncodeAES = lambda c, s: base64.b64encode(c.encrypt(pad(s)))
@@ -26,7 +28,7 @@ def encrypt(password,message):
 
     ciphertext = EncodeAES(cipher, message)
     #print('Encrypted string:', ciphertext, file=sys.stderr)
-
+    print>>sys.stderr, 'length of string: %s' % len(message)
     return ciphertext
 
 def decrypt (password,ciphertext):
@@ -45,4 +47,5 @@ def decrypt (password,ciphertext):
 def diffyhellman(gen, prime, i):
 	#gen and prim are agreed upon values and i is a private secret
 	return gen**i % prime
+
 
