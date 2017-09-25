@@ -51,11 +51,11 @@ def client():
 		while True:
 			message = encrypt.encrypt(sk, (raw_input("What is your message\n")))
 			#Until the message is empty
-			if (message == ""):
+			if (not message):
 				print>>sys.stderr, 'closing socket'
 				sock.close()
 				break
-
-			print >> sys.stderr, "Message recieved '%s'" % send_data(message)
+			message = encrypt.decrypt(sk, send_data(message))
+			print >> sys.stderr, "Message recieved '%s'" % message
 
 client()

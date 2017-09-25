@@ -49,11 +49,12 @@ def connect():
 			sk = key_exchange(connection, client_adress)
 	
 			while True:
-				data = connection.recv(128)
+				data = encrypt.decrypt(sk, connection.recv(128))
 				print>>sys.stderr, 'received "%s"' % data
-				print>>sys.stderr, 'received "%s"' % encrypt.decrypt(sk, data)
+				data = encrypt.encrypt(sk, data)
 				if data:
-                                    connection.sendall(encrypt.decrypt(sk, data))
+					print>>sys.stderr, 'sedning "%s" back to client' % data
+                                	connection.sendall(data)
                                 else:
                                     break
 					
