@@ -17,7 +17,7 @@ def encrypt(password,message):
     EncodeAES = lambda c, s: base64.b64encode(c.encrypt(pad(s)))
     
     #hashes the password with sha256 to get a encryptionkey of 32 bytes
-    key = hashlib.sha256((password).to_bytes(2, byteorder='big')).digest()
+    key = hashlib.sha256(str(password).encode()).digest()
     
     #Creates the cipher that the messege is to be encrypted with
     cipher = AES.new(key)
@@ -25,16 +25,24 @@ def encrypt(password,message):
     #Encrypts the message with the cipher and produces a ciphertext
 
     ciphertext = EncodeAES(cipher, message)
-    print('Encrypted string:', ciphertext, file=sys.stderr)
+    #print('Encrypted string:', ciphertext, file=sys.stderr)
+    print>>sys.stderr, 'Encrypted string: %s' % ciphertext
 
-def decryption (password,ciphertext)
+    return ciphertext
+
+def decrypt (password,ciphertext):
     PADDING = '{'
 
     DecodeAES = lambda c, e: c.decrypt(base64.b64decode(e)).rstrip(PADDING)
-    key = hashlib.sha256((password).to_bytes(2, byteorder='big')).digest()
+  
+    key = hashlib.sha256(str(password).encode()).digest()
+   
     cipher = AES.new(key)
+    
     decoded = DecodeAES(cipher, ciphertext)
-    print('Decrypted string:', decoded, file=sys.stderr)
+
+   #print('Decrypted string:', decoded, file=sys.stderr)
+    print>>sys.stderr, 'Decrypted string: %s' % decoded
 
 def diffyhellman(gen, prime, i):
 	#gen and prim are agreed upon values and i is a private secret
@@ -42,4 +50,4 @@ def diffyhellman(gen, prime, i):
 
 
 encrypt(3,'hej')
-
+decrypt(3, encrypt(3,'hej'))
