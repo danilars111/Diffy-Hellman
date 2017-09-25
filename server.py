@@ -41,26 +41,26 @@ def key_exchange(connection, client_adress):
         return sk
 
 def connect():
-	while True: 
+	Connect = True
+	while Connect: 
 		print >>sys.stderr, 'waiting for connection'
 		connection, client_adress = sock.accept()	
-		try:	
-			print>>sys.stderr, 'connection from', client_adress
-			sk = key_exchange(connection, client_adress)
+		print>>sys.stderr, 'connection from', client_adress
+		sk = key_exchange(connection, client_adress)
 	
-			while True:
-				data = encrypt.decrypt(sk, connection.recv(128))
-				print>>sys.stderr, 'received "%s"' % data
-				data = encrypt.encrypt(sk, data)
-				if data:
-					print>>sys.stderr, 'sedning "%s" back to client' % data
-                                	connection.sendall(data)
-                                else:
-                                    break
+		while True:
+			data = encrypt.decrypt(sk, connection.recv(128))
+			#If data is empty, close the socket
+                   	if(not data):
+		       		print>>sys.stderr, 'closing socket'
+		       		sock.close()
+				Connect = False
+				break;
+
+			print>>sys.stderr, 'received "%s"' % data
+			data = encrypt.encrypt(sk, data)
+			print>>sys.stderr, 'sedning "%s" back to client' % data
+                        connection.sendall(data)
 					
-		finally:
-                    if(data == ""):
-		         print>>sys.stderr, 'closing socket'
-		         sock.close()
 
 connect()
