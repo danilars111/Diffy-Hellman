@@ -50,14 +50,15 @@ def connect():
 	
 		while True:
                         cipher = connection.recv(128)
-			data = encrypt.decrypt(sk, cipher)
 			#If data is empty, close the socket
-                   	if(not data):
+                   	if(not cipher):
 		       		print>>sys.stderr, 'closing socket'
 		       		sock.close()
 				Connect = False
 				break;
 
+
+			data = encrypt.decrypt(sk, cipher)
 			print>>sys.stderr, 'received "%s"' % data
 			data = encrypt.encrypt(sk, data, cipher)
 			print>>sys.stderr, 'sedning "%s" back to client' % data
