@@ -11,8 +11,10 @@ def encrypt(password, message, iv = Random.new().read(AES.block_size)):
     BLOCK_SIZE = 16
     PADDING = '{'
    
-    iv = base64.b64encode(iv)
-    if iv is not None:
+    
+    if iv is None:
+        return None
+    elif len(iv) > BLOCK_SIZE:    
         iv =  base64.b64decode(iv)
         iv = iv[-BLOCK_SIZE:]
         print>>sys.stderr, 'Length of IV %s' % len(iv) 
