@@ -1,11 +1,14 @@
 import socket
 import sys
 import encrypt
-
+import base64
+from Crypto.Util import number
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-
-prime = 47791
+length = 4096
+prime = number.getPrime(length)
+print >> sys.stderr, 'Prime: %s' % prime
+print >> sys.stderr, 'Len(Prime): %s' % len(str(prime))
 generator = 48589
 number = 12222
 
