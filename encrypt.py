@@ -10,7 +10,9 @@ def encrypt(password, message, iv = Random.new().read(AES.block_size)):
     #encrypt the message
     BLOCK_SIZE = 16
     PADDING = '{'
-    iv = iv[-BLOCK_SIZE:]
+   
+    if iv is str and iv is not None:
+        iv =  base64.b64decode(iv)[16:]
     
     #Function that the message is a multiple of the block size
     pad = lambda s: s + ((BLOCK_SIZE - len(s) % BLOCK_SIZE) * PADDING)
@@ -25,11 +27,9 @@ def encrypt(password, message, iv = Random.new().read(AES.block_size)):
     cipher = AES.new(key, AES.MODE_CBC, iv)
     
     #Encrypts the message with the cipher and produces a ciphertext
-
+    
     ciphertext = EncodeAES(cipher, message, iv)
     print>>sys.stderr, 'Encrypted: %s' % ciphertext
-    
-    print>>sys.stderr, 'IV: %s' % iv
     return ciphertext
 
 def decrypt (password,ciphertext):
