@@ -61,10 +61,13 @@ def client():
 			if init:
 				ciphertext = send_data(encrypt.encrypt(sk, message))
 				iv = ciphertext
+				print >> sys.stderr, "IV '%s'" % iv
 				message = encrypt.decrypt(sk, ciphertext)
+				init = False
 			else:
 				ciphertext = send_data(encrypt.encrypt(sk, message, iv))
 				iv = ciphertext
+				print >> sys.stderr, "IV22 '%s'" % iv
 				message = encrypt.decrypt(sk, ciphertext)
 
 			print >> sys.stderr, "Message recieved '%s'" % message
