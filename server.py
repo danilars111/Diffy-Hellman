@@ -49,7 +49,8 @@ def connect():
 		sk = key_exchange(connection, client_adress)
 	
 		while True:
-			data = encrypt.decrypt(sk, connection.recv(128))
+                        cipher = connection.recv(128)
+			data = encrypt.decrypt(sk, cipher)
 			#If data is empty, close the socket
                    	if(not data):
 		       		print>>sys.stderr, 'closing socket'
@@ -58,7 +59,7 @@ def connect():
 				break;
 
 			print>>sys.stderr, 'received "%s"' % data
-			data = encrypt.encrypt(sk, data)
+			data = encrypt.encrypt(sk, data, cipher)
 			print>>sys.stderr, 'sedning "%s" back to client' % data
                         connection.sendall(data)
 					

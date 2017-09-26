@@ -5,7 +5,7 @@ from Crypto import Random
 import base64
 import hashlib
 
-def encrypt(password,message):
+def encrypt(password, message, iv = Random.new().read(AES.block_size)):
 
     #encrypt the message
     BLOCK_SIZE = 16
@@ -21,7 +21,6 @@ def encrypt(password,message):
     #hashes the password with sha256 to get a encryptionkey of 32 bytes
     key = hashlib.sha256(str(password).encode()).digest()
     
-    iv = Random.new().read(AES.block_size)
     #Creates the cipher that the messege is to be encrypted with
     cipher = AES.new(key, AES.MODE_CBC, iv)
     
@@ -29,6 +28,8 @@ def encrypt(password,message):
 
     ciphertext = EncodeAES(cipher, message, iv)
     print>>sys.stderr, 'Encrypted: %s' % ciphertext
+    
+    print>>sys.stderr, 'IV: %s' % iv
     return ciphertext
 
 def decrypt (password,ciphertext):
@@ -55,4 +56,4 @@ def diffyhellman(gen, prime, i):
 	#gen and prim are agreed upon values and i is a private secret
 	return gen**i % prime
 
-decrypt(3, encrypt(3, 'hej'))
+decrypt(3, encrypt(3, 'lol'))
