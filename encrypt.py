@@ -10,7 +10,7 @@ def encrypt(password, message, iv = Random.new().read(AES.block_size)):
     #encrypt the message
     BLOCK_SIZE = 16
     PADDING = '{'
-
+    iv = iv[-BLOCK_SIZE:]
     
     #Function that the message is a multiple of the block size
     pad = lambda s: s + ((BLOCK_SIZE - len(s) % BLOCK_SIZE) * PADDING)
