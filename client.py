@@ -45,6 +45,9 @@ def key_exchange():
 
 def client():
 	if connect():
+		iv = None
+		init = True
+
 		#Do a Diffy-Hellman key exchange
 		sk = key_exchange()
 		#Keep going
@@ -55,7 +58,15 @@ def client():
 				print>>sys.stderr, 'closing socket'
 				sock.close()
 				break
-			message = encrypt.decrypt(sk, send_data(encrypt.encrypt(sk, message)))
+			if init:
+				ciphertext = send_data(encrypt.encrypt(sk, message))
+				iv = ciphertext
+				message = encrypt.decrypt(sk, ciphertext)
+			else:
+				ciphertext = send_data(encrypt.encrypt(sk, message, iv))
+				iv = ciphertext
+				message = encrypt.decrypt(sk, ciphertext)
+
 			print >> sys.stderr, "Message recieved '%s'" % message
 
 client()
