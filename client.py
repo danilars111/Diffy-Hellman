@@ -33,8 +33,8 @@ def send_data(message):
 
 
 def key_exchange():
-	PrimeLength = 2048
-	KeyLength = 256
+	PrimeLength = 128
+	KeyLength = 32
 
 	prime = number.getPrime(PrimeLength)
 	print >> sys.stderr, 'Prime: %s' % prime
@@ -47,11 +47,7 @@ def key_exchange():
 	password = 12222
 
 	temp = send_data(prime)
-	print >> sys.stderr, 'Prime Temp: %s' % str(temp)
-	time.sleep(5)
 	temp = send_data(generator)
-	print >> sys.stderr, 'Gen Temp: %s' % str(temp)
-	time.sleet(5)
 	sk = encrypt.diffyhellman(generator, prime, password)
 	sk = send_data(sk)
 

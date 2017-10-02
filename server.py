@@ -2,9 +2,9 @@ import socket
 import sys
 import encrypt
 
-prime = 47791
-generator = 48589
-number = 98222
+#prime = 47791
+#generator = 48589
+#number = 98222
 
 
 
@@ -25,7 +25,7 @@ def echo(data, connection, client_adress):
 	if data:
 		print>>sys.stderr, 'sending data back to client'
 		connection.sendall(data)
-		return connection.recv(2048)
+		return data
 	else:
 		print>>sys.stderr, 'no more data from', client_adress
 		return False
@@ -41,7 +41,9 @@ def key_exchange(connection, client_adress):
 	number = 98222
 
         sk = encrypt.diffyhellman(generator, prime, number)
-        sk = echo(str(sk), connection, client_adress)
+        connection.sendall(str(sk))
+        sk = connection.recv(2048)
+        
         
         sk = encrypt.diffyhellman(int(sk), prime, number)
         print >> sys.stderr, "Your super secret key is '%s'" % sk
@@ -66,9 +68,9 @@ def connect():
 				break;
 
 
-			data = encrypt.decrypt(sk, cipher)
+			data = encrypt.decrypt(sk, ciphertext)
 			print>>sys.stderr, 'received "%s"' % data
-			data = encrypt.encrypt(sk, data, cipher)
+			data = encrypt.encrypt(sk, data, ciphertext)
 			print>>sys.stderr, 'sending "%s" back to client' % data
                         connection.sendall(data)
 					
