@@ -23,14 +23,22 @@ sock.listen(1)
 def echo(data, connection, client_adress):
 
 	if data:
-		#print>>sys.stderr, 'sending data back to client'
+		print>>sys.stderr, 'sending data back to client'
 		connection.sendall(data)
-		return connection.recv(128)
+		return connection.recv(2048)
 	else:
 		print>>sys.stderr, 'no more data from', client_adress
 		return False
 
 def key_exchange(connection, client_adress):
+
+	prime = long(echo(connection.recv(2048), connection, client_adress))
+	print >> sys.stderr, 'Recieved Prime: %s' % str(prime)
+	
+	generator = long(echo(connection.recv(2048), connection, client_adress))
+	print >> sys.stderr, 'Recieved Generator: %s' % str(generator)
+	
+	number = 98222
 
         sk = encrypt.diffyhellman(generator, prime, number)
         sk = echo(str(sk), connection, client_adress)
@@ -49,9 +57,9 @@ def connect():
 		sk = key_exchange(connection, client_adress)
 	
 		while True:
-                        cipher = connection.recv(128)
+                        ciphertext = connection.recv(128)
 			#If data is empty, close the socket
-                   	if(not cipher):
+                   	if(not ciphertext):
 		       		print>>sys.stderr, 'closing socket'
 		       		sock.close()
 				Connect = False
@@ -61,7 +69,7 @@ def connect():
 			data = encrypt.decrypt(sk, cipher)
 			print>>sys.stderr, 'received "%s"' % data
 			data = encrypt.encrypt(sk, data, cipher)
-			print>>sys.stderr, 'sedning "%s" back to client' % data
+			print>>sys.stderr, 'sending "%s" back to client' % data
                         connection.sendall(data)
 					
 

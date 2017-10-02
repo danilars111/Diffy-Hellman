@@ -9,8 +9,9 @@ def encrypt(password, message, iv = Random.new().read(AES.block_size)):
 
     #encrypt the message
     BLOCK_SIZE = 16
-    PADDING = '{'
-   
+    PADDING = '{'   
+    print>>sys.stderr, 'IV: %s' % iv 
+
     if len(iv) > BLOCK_SIZE:    
         iv =  base64.b64decode(iv)
         iv = iv[-BLOCK_SIZE:]
