@@ -37,10 +37,11 @@ def send_data(message):
 def key_exchange():
 	KeyLength = 256
         
-        #RFC 3526 4096 bit MODP Group 
+        #RFC 3526 2048 bit MODP Group 
         #https://www.ietf.org/rfc/rfc3526.txt
 
-        prime = 11
+        #prime = diffArgs.getPrime()
+	prime = 17
 	print >> sys.stderr, 'Prime: %s' % prime
 	print >> sys.stderr, 'Len(Prime): %s' % len(str(prime))
 
@@ -48,7 +49,8 @@ def key_exchange():
 	generator = 2
 	print >> sys.stderr, 'Generator: %s' % str(generator)
 	print >> sys.stderr, 'Len(Generator): %s' % len(str(generator))
-	password = 2 #getrandbits(24)
+	
+        password = 2 #getrandbits(24)
         print>>sys.stderr, 'password: %s' % password
 
 	temp = send_data(prime)

@@ -37,9 +37,7 @@ def key_exchange(connection, client_adress):
 	
 	generator = long(echo(connection.recv(4096), connection, client_adress))
 	print >> sys.stderr, 'Recieved Generator: %s' % str(generator)
-	
-
-        number = 98222
+        number = 3	
 
         sk = encrypt.diffyhellman(generator, prime, number)
         connection.sendall(str(sk))
