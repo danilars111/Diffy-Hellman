@@ -19,7 +19,7 @@ def connect():
 		sock.connect(server_adress)
 		return True
 	else:
-		return False
+	    return False
 			 
 
 
@@ -40,17 +40,17 @@ def key_exchange():
         #RFC 3526 2048 bit MODP Group 
         #https://www.ietf.org/rfc/rfc3526.txt
 
-        #prime = diffArgs.getPrime()
-	prime = 17
+        prime = diffArgs.getPrime()	
+        #prime = 17
 	print >> sys.stderr, 'Prime: %s' % prime
 	print >> sys.stderr, 'Len(Prime): %s' % len(str(prime))
 
 	#NOT CSPRNG!!!!!
-	generator = 2
+	generator = diffArgs.getGen()
 	print >> sys.stderr, 'Generator: %s' % str(generator)
 	print >> sys.stderr, 'Len(Generator): %s' % len(str(generator))
 	
-        password = 2 #getrandbits(24)
+        password = getrandbits(2*KeyLength)
         print>>sys.stderr, 'password: %s' % password
 
 	temp = send_data(prime)
