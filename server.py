@@ -38,7 +38,7 @@ def key_exchange(connection, client_adress):
 	generator = long(echo(connection.recv(4096), connection, client_adress))
 	print >> sys.stderr, 'Recieved Generator: %s' % str(generator)
 	
-	number = 98222
+	number = 5
         
         skClient = long(echo(connection.recv(4096), connection, client_adress))
         print>> sys.stderr, 'Recieved sk: %s' % str(skClient)
