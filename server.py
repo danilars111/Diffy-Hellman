@@ -10,7 +10,7 @@ import encrypt
 
 
 #Create a tcp/ip socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock = socket.socket(socket.AF_INET , socket.SOCK_STREAM)
 
 #Bind the socket to port 11111
 server_adress = ('localhost', 11111)
@@ -38,17 +38,15 @@ def key_exchange(connection, client_adress):
 	generator = long(echo(connection.recv(4096), connection, client_adress))
 	print >> sys.stderr, 'Recieved Generator: %s' % str(generator)
 	
-	number = 98222
-        
-        skClient = long(echo(connection.recv(4096), connection, client_adress))
-        print>> sys.stderr, 'Recieved sk: %s' % str(skClient)
+
+        number = 98222
 
         sk = encrypt.diffyhellman(generator, prime, number)
         connection.sendall(str(sk))
-        
-        
-        
-        sk = encrypt.diffyhellman(skClient, prime, number)
+        sk = connection.recv(4096)
+                                        
+                                                
+        sk = encrypt.diffyhellman(int(sk), prime, number)
         print >> sys.stderr, "Your super secret key is '%s'" % sk
 
         return sk
