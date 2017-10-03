@@ -32,20 +32,23 @@ def echo(data, connection, client_adress):
 
 def key_exchange(connection, client_adress):
 
-	prime = long(echo(connection.recv(2048), connection, client_adress))
+	prime = long(echo(connection.recv(4096), connection, client_adress))
 	print >> sys.stderr, 'Recieved Prime: %s' % str(prime)
 	
-	generator = long(echo(connection.recv(2048), connection, client_adress))
+	generator = long(echo(connection.recv(4096), connection, client_adress))
 	print >> sys.stderr, 'Recieved Generator: %s' % str(generator)
 	
 	number = 98222
+        
+        skClient = long(echo(connection.recv(4096), connection, client_adress))
+        print>> sys.stderr, 'Recieved sk: %s' % str(skClient)
 
         sk = encrypt.diffyhellman(generator, prime, number)
         connection.sendall(str(sk))
-        sk = connection.recv(2048)
         
         
-        sk = encrypt.diffyhellman(int(sk), prime, number)
+        
+        sk = encrypt.diffyhellman(skClient, prime, number)
         print >> sys.stderr, "Your super secret key is '%s'" % sk
 
         return sk
