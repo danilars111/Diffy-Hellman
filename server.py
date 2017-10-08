@@ -10,6 +10,7 @@ MESSAGE_SIZE = 256
 
 #Create a tcp/ip socket
 sock = socket.socket(socket.AF_INET , socket.SOCK_STREAM)
+BLOCK_SIZE = 128
 
 #Bind the socket to port 11111
 server_adress = ('localhost', 11111)
@@ -59,6 +60,7 @@ def connect():
 	
 		while True:
                         ciphertext = connection.recv(MESSAGE_SIZE)
+
 			#If data is empty, close the socket
                    	if(not ciphertext):
 		       		print>>sys.stderr, 'closing socket'

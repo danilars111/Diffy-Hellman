@@ -8,6 +8,7 @@ from Crypto.Random.random import getrandbits
 from Crypto import Random
 from Crypto.Util import number
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+MESSAGE_SIZE = 256
 
 def connect():
 	confirm = raw_input("Do you want to connect? [y/n]\n")
@@ -27,11 +28,9 @@ def send_data(message):
 	
 	#Send message
 	print>>sys.stderr, 'Sending "%s"...' % message
-	sock.sendall(str (message))
-
+	sock.sendall(bytes (message))
 	#return for response from server
-         
-	return sock.recv(len(bytes(message)))
+	return sock.recv(len(bytes(message))
 
 
 def key_exchange():
@@ -66,6 +65,9 @@ def client():
 		#Keep going
 		while True:
 			message = raw_input("What is your message?\n")
+			if len(message) > MESSAGE_SIZE:
+				print>>sys.stderr, 'Message Exceeding the character limit of %s \nTry Again!\n' % MESSAGE_SIZE
+				continue
 
 			#Until the message is empty
 			if (not message):
