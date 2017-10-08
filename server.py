@@ -4,13 +4,13 @@ import encrypt
 from Crypto.Random.random import getrandbits
 
 KEY_LENGTH = 256
-MESSAGE_SIZE = 256
-
+MESSAGE_SIZE = 128
+BLOCK_SIZE = 128
+PRIME_LENGTH = 4096
 
 
 #Create a tcp/ip socket
 sock = socket.socket(socket.AF_INET , socket.SOCK_STREAM)
-BLOCK_SIZE = 128
 
 #Bind the socket to port 11111
 server_adress = ('localhost', 11111)
@@ -31,8 +31,7 @@ def echo(data, connection, client_adress):
 		return False
 
 def key_exchange(connection, client_adress):
-
-	prime = long(echo(connection.recv(4096), connection, client_adress))
+	prime = long(echo(connection.recv(PRIME_LENGTH), connection, client_adress))
 	#print >> sys.stderr, 'Recieved Prime: %s' % str(prime)
 	
 	generator = long(echo(connection.recv(1), connection, client_adress))
@@ -42,7 +41,7 @@ def key_exchange(connection, client_adress):
 
         sk = encrypt.diffyhellman(generator, prime, number)
         connection.sendall(str(sk))
-        sk = connection.recv(4096)
+        sk = connection.recv(PRIME_LENGTH)
         #print >> sys.stderr, 'Recieved key from client: %s' % sk                                
                                                 
         sk = encrypt.diffyhellman(int(sk), prime, number)

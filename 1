@@ -8,7 +8,7 @@ from Crypto.Random.random import getrandbits
 from Crypto import Random
 from Crypto.Util import number
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-MESSAGE_SIZE = 80
+MESSAGE_SIZE = 256
 
 def connect():
 	confirm = raw_input("Do you want to connect? [y/n]\n")
@@ -27,6 +27,7 @@ def connect():
 def send_data(message):	
 	
 	#Send message
+	print>>sys.stderr, 'Sending "%s"...' % message
 	sock.sendall(bytes (message))
 	#return for response from server
 	return sock.recv(len(bytes(message)))
@@ -50,6 +51,8 @@ def key_exchange():
 	sk = send_data(sk)
 
 	sk = encrypt.diffyhellman(int(sk), prime, password)
+	print >> sys.stderr, "Your super secret key is '%s'" % sk
+
 	return sk
 
 def client():
