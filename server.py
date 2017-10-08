@@ -3,7 +3,8 @@ import sys
 import encrypt
 from Crypto.Random.random import getrandbits
 
-KeyLength = 256
+KEY_LENGTH = 256
+MESSAGE_SIZE = 256
 
 
 
@@ -33,9 +34,10 @@ def key_exchange(connection, client_adress):
 	prime = long(echo(connection.recv(4096), connection, client_adress))
 	#print >> sys.stderr, 'Recieved Prime: %s' % str(prime)
 	
-	generator = long(echo(connection.recv(4096), connection, client_adress))
+	generator = long(echo(connection.recv(1), connection, client_adress))
 	#print >> sys.stderr, 'Recieved Generator: %s' % str(generator)
-        number = getrandbits(2*KeyLength)	
+       
+        number = getrandbits(2*KEY_LENGTH)	
 
         sk = encrypt.diffyhellman(generator, prime, number)
         connection.sendall(str(sk))
@@ -56,7 +58,7 @@ def connect():
 		sk = key_exchange(connection, client_adress)
 	
 		while True:
-                        ciphertext = connection.recv(128)
+                        ciphertext = connection.recv(MESSAGE_SIZE)
 			#If data is empty, close the socket
                    	if(not ciphertext):
 		       		print>>sys.stderr, 'closing socket'
