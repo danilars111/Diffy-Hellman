@@ -11,12 +11,12 @@ def encrypt(password, message, iv = Random.new().read(AES.block_size)):
     #encrypt the message
     BLOCK_SIZE = 16
     PADDING = '{'   
-    print>>sys.stderr, 'IV: %s' % iv 
+   # print>>sys.stderr, 'IV: %s' % iv 
 
     if len(iv) > BLOCK_SIZE:    
         iv =  base64.b64decode(iv)
         iv = iv[-BLOCK_SIZE:]
-        print>>sys.stderr, 'Length of IV %s' % len(iv) 
+       # print>>sys.stderr, 'Length of IV %s' % len(iv) 
                                                         
     #Function that the message is a multiple of the block size
     pad = lambda s: s + ((BLOCK_SIZE - len(s) % BLOCK_SIZE) * PADDING)
@@ -33,7 +33,7 @@ def encrypt(password, message, iv = Random.new().read(AES.block_size)):
     #Encrypts the message with the cipher and produces a ciphertext
                                                                                                    
     ciphertext = EncodeAES(cipher, message, iv)
-    print>>sys.stderr, 'Encrypted: %s' % ciphertext
+    #print>>sys.stderr, 'Encrypted: %s' % ciphertext
     return ciphertext
 
 def decrypt (password,ciphertext):
@@ -52,7 +52,7 @@ def decrypt (password,ciphertext):
     decoded = DecodeAES(cipher, ciphertext[16:])
 
     #print('Decrypted string:', decoded, file=sys.stderr)
-    print>>sys.stderr, 'Decrypted: %s' % decoded                                                                                                                            
+    #print>>sys.stderr, 'Decrypted: %s' % decoded                                                                                                                            
     return decoded
     
 def diffyhellman(gen, prime, i):
@@ -60,5 +60,4 @@ def diffyhellman(gen, prime, i):
     return pow(gen,i,prime) 
 
 
-decrypt(3, encrypt(3, 'lol'))
 

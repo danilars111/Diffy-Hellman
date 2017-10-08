@@ -3,9 +3,6 @@ import sys
 import encrypt
 from Crypto.Random.random import getrandbits
 
-#prime = 47791
-#generator = 48589
-#number = 98222
 KeyLength = 256
 
 
@@ -34,19 +31,19 @@ def echo(data, connection, client_adress):
 def key_exchange(connection, client_adress):
 
 	prime = long(echo(connection.recv(4096), connection, client_adress))
-	print >> sys.stderr, 'Recieved Prime: %s' % str(prime)
+	#print >> sys.stderr, 'Recieved Prime: %s' % str(prime)
 	
 	generator = long(echo(connection.recv(4096), connection, client_adress))
-	print >> sys.stderr, 'Recieved Generator: %s' % str(generator)
+	#print >> sys.stderr, 'Recieved Generator: %s' % str(generator)
         number = getrandbits(2*KeyLength)	
 
         sk = encrypt.diffyhellman(generator, prime, number)
         connection.sendall(str(sk))
         sk = connection.recv(4096)
-                                        
+        #print >> sys.stderr, 'Recieved key from client: %s' % sk                                
                                                 
         sk = encrypt.diffyhellman(int(sk), prime, number)
-        print >> sys.stderr, "Your super secret key is '%s'" % sk
+        #print >> sys.stderr, "Your super secret key is '%s'" % sk
 
         return sk
 
