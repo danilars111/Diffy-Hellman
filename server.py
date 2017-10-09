@@ -6,7 +6,7 @@ from Crypto.Random.random import getrandbits
 KEY_LENGTH = 256
 MESSAGE_SIZE = 128
 BLOCK_SIZE = 128
-PRIME_LENGTH = 4096
+PRIME_LENGTH = 6144
 
 
 #Create a tcp/ip socket
@@ -23,7 +23,7 @@ sock.listen(1)
 def echo(data, connection, client_adress):
 
 	if data:
-		print>>sys.stderr, 'sending data back to client'
+		#print>>sys.stderr, 'sending data back to client'
 		connection.sendall(data)
 		return data
 	else:
@@ -71,7 +71,7 @@ def connect():
 			data = encrypt.decrypt(sk, ciphertext)
 			print>>sys.stderr, 'received "%s"' % data
 			data = encrypt.encrypt(sk, data, ciphertext)
-			print>>sys.stderr, 'sending "%s" back to client' % data
+			print>>sys.stderr, 'sending data back to client'
                         connection.sendall(data)
 					
 
