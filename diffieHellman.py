@@ -7,3 +7,7 @@ def getGen():
     return 2
 
 
+def calc(gen, prime, i):
+    #Calculates gen^i % prime
+    #gen and prim are agreed upon values and i is a private secret
+    return pow(gen,i,prime) 

@@ -1,6 +1,7 @@
 import socket
 import sys
 import encrypt
+import diffieHellman
 from Crypto.Random.random import getrandbits
 
 KEY_LENGTH = 256
@@ -32,20 +33,20 @@ def echo(data, connection, client_adress):
 
 def key_exchange(connection, client_adress):
 	prime = long(echo(connection.recv(PRIME_LENGTH), connection, client_adress))
-	#print >> sys.stderr, 'Recieved Prime: %s' % str(prime)
 	
 	generator = long(echo(connection.recv(1), connection, client_adress))
-	#print >> sys.stderr, 'Recieved Generator: %s' % str(generator)
        
         number = getrandbits(2*KEY_LENGTH)	
-
-        sk = encrypt.diffyhellman(generator, prime, number)
+        
+        #Calculates the servers contribution to the shared secretkey
+        sk = diffieHellman.calc(generator, prime, number)
         connection.sendall(str(sk))
+        
+        #Receives the clients part of the shared secret
         sk = connection.recv(PRIME_LENGTH)
-        #print >> sys.stderr, 'Recieved key from client: %s' % sk                                
-                                                
-        sk = encrypt.diffyhellman(int(sk), prime, number)
-        #print >> sys.stderr, "Your super secret key is '%s'" % sk
+        
+        #Calculates the shared secret with the clients contribution stored in sk                                        
+        sk = diffieHellman.calc(int(sk), prime, number)
 
         return sk
 
@@ -56,23 +57,21 @@ def connect():
 		connection, client_adress = sock.accept()	
 		print>>sys.stderr, 'connection from', client_adress
 		sk = key_exchange(connection, client_adress)
-	
+                encryptionKey = encrypt.hash(sk)	
 		while True:
                         ciphertext = connection.recv(MESSAGE_SIZE)
 
-			#If data is empty, close the socket
+			#If data is empty, wait for new connection
                    	if(not ciphertext):
-		       		print>>sys.stderr, 'closing socket'
-		       		sock.close()
-				Connect = False
 				break;
 
 
-			data = encrypt.decrypt(sk, ciphertext)
+			data = encrypt.decrypt(encryptionKey, ciphertext)
 			print>>sys.stderr, 'received "%s"' % data
-			data = encrypt.encrypt(sk, data, ciphertext)
+			data = encrypt.encrypt(encryptionKey, data, ciphertext)
 			print>>sys.stderr, 'sending data back to client'
                         connection.sendall(data)
 					
 
 connect()
+
