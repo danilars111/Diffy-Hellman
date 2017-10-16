@@ -27,7 +27,8 @@ def connect():
 def send_data(message):	
 	
 	#Send message
-	sock.sendall(bytes (message))
+        #print>>sys.stderr, 'sending : %s' %message
+        sock.sendall(bytes (message))
 	#return for response from server
 	return sock.recv(len(bytes(message)))
 

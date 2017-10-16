@@ -57,7 +57,7 @@ def connect():
 		connection, client_adress = sock.accept()	
 		print>>sys.stderr, 'connection from', client_adress
 		sk = key_exchange(connection, client_adress)
-                encryptionKey = encrypt.hash(sk)	
+                encryptionKey = encrypt.hash(sk)
 		while True:
                         ciphertext = connection.recv(MESSAGE_SIZE)
 
