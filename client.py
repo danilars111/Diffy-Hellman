@@ -42,8 +42,8 @@ def send_data(message):
 
 
 def key_exchange():
-	KeyLength = 256
-        
+	KEYLENGTH = 256
+        PRIME_LENGTH = 6144 
         #RFC 3526 4096 bit MODP Group 
         #https://www.ietf.org/rfc/rfc3526.txt
 
@@ -51,7 +51,7 @@ def key_exchange():
     
 	generator = diffieHellman.getGen()
 	
-        password = getrandbits(2*KeyLength)
+        password = getrandbits(2*KEYLENGTH)
 
 	send_data(prime)
 	send_data(generator)
@@ -60,7 +60,7 @@ def key_exchange():
         sk = diffieHellman.calc(generator, prime, password)
     
 	sock.sendall(bytes(sk))
-        sk = sock.recv(6144)
+        sk = sock.recv(PRIME_LENGTH)
         
         #Calculates the shared secret with the servers contribution stored in sk
 	sk = diffieHellman.calc(int(sk), prime, password)
