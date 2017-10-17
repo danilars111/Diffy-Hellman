@@ -11,14 +11,22 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 MESSAGE_SIZE = 80
 
 def connect():
-	confirm = raw_input("Do you want to connect? [y/n]\n")
+    while True:
+        confirm = raw_input("Do you want to connect? [y/n]\n")
 	
 	if(confirm == 'y'):
 		#Connect to the port that the server is listening 
 		server_adress = ('localhost', 11111)
-		print>>sys.stderr, 'Connecting to %s port %s' % server_adress
-		sock.connect(server_adress)
-		return True
+		print>>sys.stderr, 'Attempting to connect to %s port %s\n' % server_adress
+                try:
+                    sock.connect(server_adress)
+               
+                except socket.error:
+                    print>>sys.stderr,'Could not connect to socket\n'
+                    continue
+                
+                print>>sys.stderr,'Connection established\n'
+                return True
 	else:
 	    return False
 			 
@@ -40,17 +48,19 @@ def key_exchange():
         #https://www.ietf.org/rfc/rfc3526.txt
 
         prime = diffieHellman.getPrime()	
-
+    
 	generator = diffieHellman.getGen()
 	
         password = getrandbits(2*KeyLength)
 
 	send_data(prime)
 	send_data(generator)
-        
+
         #Calculates the clients contribution to the shared secretkey
         sk = diffieHellman.calc(generator, prime, password)
-	sk = send_data(sk)
+    
+	sock.sendall(bytes(sk))
+        sk = sock.recv(6144)
         
         #Calculates the shared secret with the servers contribution stored in sk
 	sk = diffieHellman.calc(int(sk), prime, password)
