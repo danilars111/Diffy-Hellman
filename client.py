@@ -35,7 +35,6 @@ def connect():
 def send_data(message):	
 	
 	#Send message
-        #print>>sys.stderr, 'sending : %s' %message
         sock.sendall(bytes (message))
 	#return for response from server
 	return sock.recv(len(bytes(message)))
@@ -57,14 +56,15 @@ def key_exchange():
 	send_data(generator)
 
         #Calculates the clients contribution to the shared secretkey
-        sk = diffieHellman.calc(generator, prime, password)
-    
-	sock.sendall(bytes(sk))
-        sk = sock.recv(PRIME_LENGTH)
         
-        #Calculates the shared secret with the servers contribution stored in sk
-	sk = diffieHellman.calc(int(sk), prime, password)
-	return sk
+        secretKey = diffieHellman.calc(generator, prime, password)
+    
+	sock.sendall(bytes(secretKey))
+        secretKey = sock.recv(PRIME_LENGTH)
+        
+        #Calculates the shared secret with the servers contribution stored in secretKey
+	secretKey = diffieHellman.calc(int(secretKey), prime, password)
+	return secretKey
 
 def client():
 	if connect():
@@ -72,8 +72,8 @@ def client():
 		init = True
 
 		#Do a Diffy-Hellman key exchange
-		sk = key_exchange()
-	        encryptionKey = encrypt.hash(sk)
+		secretKey = key_exchange()
+	        encryptionKey = encrypt.hash(secretKey)
                 #Keep going
 		while True:
 			message = raw_input("What is your message?\n")

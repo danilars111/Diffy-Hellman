@@ -56,17 +56,17 @@ def key_exchange(connection, client_adress):
         number = getrandbits(2*KEY_LENGTH)	
         
         #Calculates the servers contribution to the shared secretkey
-        sk = diffieHellman.calc(generator, prime, number)
+        secretKey= diffieHellman.calc(generator, prime, number)
         
-        connection.sendall(str(sk))
+        connection.sendall(str(secretKey))
         
         #Receives the clients part of the shared secret
-        sk = connection.recv(PRIME_LENGTH)
+        secretKey = connection.recv(PRIME_LENGTH)
          
         #Calculates the shared secret with the clients contribution stored in sk                                        
-        sk = diffieHellman.calc(int(sk), prime, number)
+        secretKey = diffieHellman.calc(int(secretKey), prime, number)
 
-        return sk
+        return secretKey
 
 def connect():
     if not bind():
@@ -78,8 +78,8 @@ def connect():
 	    print >>sys.stderr, 'waiting for connection'
 	    connection, client_adress = sock.accept()	
 	    print>>sys.stderr, 'connection from', client_adress
-	    sk = key_exchange(connection, client_adress)
-            encryptionKey = encrypt.hash(sk)
+	    secretKey = key_exchange(connection, client_adress)
+            encryptionKey = encrypt.hash(secretKey)
 	    while True:
                 ciphertext = connection.recv(MESSAGE_SIZE)
 
