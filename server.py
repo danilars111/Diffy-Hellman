@@ -90,7 +90,7 @@ def connect():
 
 		data = encrypt.decrypt(encryptionKey, ciphertext)
 		print>>sys.stderr, 'received "%s"' % data
-	        data = encrypt.encrypt(encryptionKey, data, ciphertext)
+	        data = encrypt.encrypt(encryptionKey, data)
 		print>>sys.stderr, 'sending data back to client'
                 connection.sendall(data)
 					

@@ -6,15 +6,12 @@ from Crypto import Random
 import base64
 import hashlib
 
-def encrypt(key, message, iv = Random.new().read(AES.block_size)):
+def encrypt(key, message):
 
     #encrypt the message
     BLOCK_SIZE = 16
     PADDING = '{'   
-
-    if len(iv) > BLOCK_SIZE:    
-        iv =  base64.b64decode(iv)
-        iv = iv[-BLOCK_SIZE:]
+    iv = Random.new().read(AES.block_size)
                                                         
     #Function that the message is a multiple of the block size
     pad = lambda s: s + ((BLOCK_SIZE - len(s) % BLOCK_SIZE) * PADDING)

@@ -68,8 +68,6 @@ def key_exchange():
 
 def client():
 	if connect():
-		iv = None
-		init = True
 
 		#Do a Diffy-Hellman key exchange
 		secretKey = key_exchange()
@@ -87,17 +85,9 @@ def client():
 				sock.close()
 				break
                         
-                        #The IV for the first message exhange have to be randomized 
-			if init:
-				ciphertext = send_data(encrypt.encrypt(encryptionKey, message))
-				iv = ciphertext
-				message = encrypt.decrypt(encryptionKey, ciphertext)
-				init = False
-                        #Handles the rest of the exchanges with the previous ciphertext as IV
-			else:
-				ciphertext = send_data(encrypt.encrypt(encryptionKey, message, iv))
-				iv = ciphertext
-				message = encrypt.decrypt(encryptionKey, ciphertext)
+                        #Send and recieve data to server 
+			ciphertext = send_data(encrypt.encrypt(encryptionKey, message))
+			message = encrypt.decrypt(encryptionKey, ciphertext)
 
 			print >> sys.stderr, "Message recieved '%s'" % message
 
